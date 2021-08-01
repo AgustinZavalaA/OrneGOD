@@ -1,5 +1,6 @@
 import numpy as np
 import re
+import math
 import matplotlib.pyplot as plt
 
 
@@ -7,10 +8,18 @@ def euler(y: float, h: float, eq: float) -> float:
     return y + h * eq
 
 
+def eval_equation(eq: str, x, y):
+    return eval(eq.replace("x", str(x).replace("y", str(y))))
+
+
 def replaceEquation(eq: str, x: float, y: float) -> float:
     eq = eq.replace(" ", "")
 
     eq = eq.replace("^", "**")
+
+    eq = re.sub(r"\)e", ") * " + str(math.e), eq)
+    eq = re.sub(r"(\d+)e", r"\1 * " + str(math.e), eq)
+    eq = eq.replace("e", str(math.e))
 
     eq = re.sub(r"\)x", ") * " + str(x), eq)
     eq = re.sub(r"(\d+)x", r"\1 * " + str(x), eq)
@@ -37,13 +46,13 @@ def main():
     eq = "2x-3y+1"
     x = 1
     y = 5
-    h = 0.05
+    h = 0.1
     ygoal = 1.2
 
     x_axis.append(x)
     y_axis.append(y)
 
-    number_steps = int((ygoal - x) / h)
+    number_steps = int((ygoal - x) / h) + 1
 
     for _ in range(number_steps):
         y = euler(y, h, replaceEquation(eq, x, y))
@@ -52,8 +61,6 @@ def main():
         y_axis.append(y)
 
     print(y)
-    x_axis = np.array(x_axis)
-    y_axis = np.array(y_axis)
     plt.plot(x_axis, y_axis)
     plt.show()
 
