@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.misc import derivative
 from newton import newton, graficar_newton
 from euler import euler, eval_equation
+from math import sin, cos, tan, exp
 
 
 def clean_string(eq):
@@ -41,7 +42,7 @@ def menu():
         x_axis, y_axis = [], []
         eq = input("f(x, y) = ")
         eq = clean_string(eq)
-        x = float(input("f( )"))
+        x = float(input("f( ) = "))
         y = float(input("f(" + str(x) + ") = "))
         h = float(input("h = "))
         ygoal = float(input("meta y = "))
@@ -50,10 +51,16 @@ def menu():
         y_axis.append(y)
 
         number_steps = int((ygoal - x) / h) + 1
-
+        iter = 0
+        print("Iter   x     y    yReal      absErr       relErr")
         for _ in range(number_steps):
             y = euler(y, h, eval_equation(eq, x, y))
             x = x + h
+            iter += 1
+            yReal = exp(-0.2 + 0.2 * x ** 2)
+            print(
+                "%d   %.2f    %.2f    %.4f    %.4f     %.4f" % (iter, x, y, yReal, yReal - y, (yReal - y) / abs(yReal))
+            )
             x_axis.append(x)
             y_axis.append(y)
 
@@ -72,10 +79,19 @@ def menu():
         # create lambda from function string
         f = lambda x: eval(eq)
 
+        iter = 0
+        print("Iter   x    f(x)   f'(x)      yReal    absErr     relErr")
+
         xi = x0
         while True:
             # print(xi)
-            xi = newton(f, xi)
+            xi, fp = newton(f, xi)
+            yReal = exp(-0.2 + 0.2 * xi ** 2)
+            print(
+                "%d   %.2f    %.2f    %.2f     %.4f    %.4f     %.4f"
+                % (iter, xi, f(xi), fp, yReal, yReal - f(xi), ((yReal - f(xi)) / abs(yReal)))
+            )
+            iter += 1
             if f(xi) > tope_y - margen_error and f(xi) < tope_y + margen_error:
                 break
 

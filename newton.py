@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 def newton(f, x):
-    return x - f(x) / derivative(f, x)
+    return x - f(x) / derivative(f, x), derivative(f, x)
 
 
 def graficar_newton(f, x_inicial, x_final):
