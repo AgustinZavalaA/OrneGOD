@@ -6,6 +6,7 @@ from scipy.misc import derivative
 from newton import newton, graficar_newton
 from euler import euler, eval_equation
 from math import sin, cos, tan, exp
+import datetime
 
 
 def clean_string(eq):
@@ -27,6 +28,12 @@ def clean_string(eq):
 
 
 def main():
+    print("UNIVERSIDAD POLITÉCNICA DE VICTORIA")
+    print("Solución de ecuaciones por métodos númericos")
+    print("Integrantes del equipo:\n- 1930120 - Agustín Zavala Arias\n- 1930346 - Roberto Eduardo Higuera Sánchez")
+    print("Materia: Matemáticas para Ingeniería II")
+    print("Docente: Ing. Juan Manuel Ornelas Llerena")
+    print("Fecha: " + str(datetime.date.today()) + "\n")
     while menu():
         pass
 
@@ -58,6 +65,8 @@ def menu():
             x = x + h
             iter += 1
             yReal = exp(-0.2 + 0.2 * x ** 2)
+            error_absoluto = yReal - y
+            error_relativo = error_absoluto / abs(yReal)
             print(
                 "%d   %.2f    %.2f    %.4f    %.4f     %.4f" % (iter, x, y, yReal, yReal - y, (yReal - y) / abs(yReal))
             )
@@ -86,6 +95,8 @@ def menu():
         while True:
             # print(xi)
             xi, fp = newton(f, xi)
+            if fp == 0:
+                break
             yReal = exp(-0.2 + 0.2 * xi ** 2)
             print(
                 "%d   %.2f    %.2f    %.2f     %.4f    %.4f     %.4f"

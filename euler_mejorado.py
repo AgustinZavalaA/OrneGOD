@@ -1,15 +1,13 @@
-import numpy as np
 import re
 import math
-import matplotlib.pyplot as plt
 
 
 def euler(y: float, h: float, eq: float) -> float:
     return y + h * eq
 
 
-def eval_equation(eq: str, x, y):
-    return eval(eq.replace("x", str(x).replace("y", str(y))))
+def euler_mejorado(y, h, eq0, eq1):
+    return y + h * ((eq0 + eq1) / 2)
 
 
 def replaceEquation(eq: str, x: float, y: float) -> float:
@@ -33,37 +31,20 @@ def replaceEquation(eq: str, x: float, y: float) -> float:
 
 
 def main():
-    x_axis, y_axis = [], []
-
-    # ec = input("EC og: ")
-
-    # x0 = float(input("xd: "))
-    # y0 = float(input("y : "))
-
-    # h = float(input("h : "))
-
-    # ygoal = float(input("h : "))
-    eq = "2x-3y+1"
-    x = 1
-    y = 5
+    eq = "2*x*y"
+    x = 0
+    y = 1
     h = 0.1
-    ygoal = 1.2
+    yGoal = 0.5
 
-    x_axis.append(x)
-    y_axis.append(y)
+    pasos = int((yGoal - x) / h)
 
-    number_steps = math.floor((ygoal - x) / h)
-    print(number_steps)
-
-    for _ in range(number_steps):
-        y = euler(y, h, replaceEquation(eq, x, y))
+    for _ in range(pasos):
+        eq0 = replaceEquation(eq, x, y)
         x = x + h
-        x_axis.append(x)
-        y_axis.append(y)
-
+        y_dot = euler(y, h, eq0)
+        y = euler_mejorado(y, h, eq0, replaceEquation(eq, x, y_dot))
     print(y)
-    plt.plot(x_axis, y_axis)
-    plt.show()
 
 
 if __name__ == "__main__":
